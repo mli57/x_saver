@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<!-- data-theme="black" applies the DaisyUI "black" theme -->
+<html lang="en" data-theme="black">
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>X Saver</title>
+    <!-- popup.css bundles Tailwind & DaisyUI utility classes -->
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+
+  <!-- popup dimensions is 400px wide, scrollable up to 600px tall -->
+  <body class="w-[490px] min-h-[200px] max-h-[600px] flex flex-col bg-base-100 text-base-content">
+    <div id="app" class="flex flex-col h-full">
+
+      <!-- Top bar: extension name on the left, live post count on the right -->
+      <header class="flex justify-between items-center px-4 py-3 border-b border-base-300">
+        <h1 class="text-base font-bold">X Saver</h1>
+        <span id="count" class="text-xs opacity-50">0 saved</span>
+      </header>
+
+      <!-- popup functionalities: search, sort order, and a clear-all button -->
+      <div id="controls" class="flex gap-2 px-4 py-2.5 border-b border-base-300 items-center">
+        <!-- Typing here to filter results -->
+        <input
+          type="text"
+          id="search"
+          placeholder="Search"
+          class="input input-bordered input-sm flex-1 rounded-full"
+        />
+
+        <!-- sort posts by a few options -->
+        <select id="sort" class="select select-bordered select-sm">
+          <option value="savedAt">Recently saved</option>
+          <option value="timestamp">Post date</option>
+          <option value="author">Author</option>
+        </select>
+
+        <button id="clear-all" class="btn btn-xs btn-error btn-outline">Clear all</button>
+      </div>
+
+      <!-- Post cards are injected here by renderPosts() in popup.js -->
+      <div id="posts" class="overflow-y-auto flex-1"></div>
+
+    </div>
+    <script src="popup.js"></script>
+  </body>
+</html>

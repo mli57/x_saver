@@ -1,0 +1,12 @@
+.x-saver-btn {
+  margin-left: 12px;
+  padding: 4px 10px;
+  border: 1px solid #536471;
+  border-radius: 9999px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.x-saver-btn:disabled {
+  cursor: default;
+}
