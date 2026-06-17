@@ -21,7 +21,8 @@ function savePost(data) {
     const alreadySaved = posts.some((p) => p.url === data.url);
     if (!alreadySaved) {
       posts.unshift(data);
-      chrome.storage.local.set({ posts });
+      chrome.storage.local.set({ posts }); // saves to storage
+      chrome.runtime.sendMessage({ type: "post_saved"}); // tells background.js to update count 
     }
   });
 }

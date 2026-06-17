@@ -120,7 +120,8 @@ function deletePost(index) {
   const filtered = getFiltered(getSorted(allPosts));
   const post = filtered[index];
   allPosts = allPosts.filter((p) => p.url !== post.url || p.savedAt !== post.savedAt);
-  chrome.storage.local.set({ posts: allPosts }, refresh);
+  chrome.storage.local.set({ posts: allPosts }, refresh); // delete from storage
+  chrome.runtime.sendMessage({ type: "post_saved" }); // signals background.js for badge to decrease
 }
 
 // Reads all saved posts from extension storage and runs the first render
@@ -139,7 +140,8 @@ sortEl.addEventListener("change", refresh);
 clearAllElements.addEventListener("click", () => {
   if (confirm("Delete all saved posts?")) {
     allPosts = [];
-    chrome.storage.local.set({ posts: [] }, refresh);
+    chrome.storage.local.set({ posts: [] }, refresh); // remove all data
+    chrome.runtime.sendMessage({ type: "post_saved" }); // signals background.js to remove badge
   }
 });
 
