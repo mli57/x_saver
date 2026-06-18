@@ -17,7 +17,10 @@
       <!-- Top bar: extension name on the left, live post count on the right -->
       <header class="flex justify-between items-center px-4 py-3 border-b border-base-300">
         <h1 class="text-base font-bold">X Saver</h1>
-        <span id="count" class="text-xs opacity-50">0 saved</span>
+        <div class="flex items-center gap-2">
+          <span id="count" class="text-xs opacity-50">0 saved</span>
+          <button id="export-csv" class="btn btn-xs btn-outline text-blue-400 border-blue-400 btn-primary">export posts</button>
+        </div>
       </header>
 
       <!-- popup functionalities: search, sort order, and a clear-all button -->
@@ -31,7 +34,7 @@
         />
 
         <!-- sort posts by a few options -->
-        <select id="sort" class="select select-bordered select-sm">
+        <select id="sort" class="select select-bordered select-sm w-auto min-w-0" style="width: fit-content">
           <option value="savedAt">Recently saved</option>
           <option value="timestamp">Post date</option>
           <option value="author">Author</option>

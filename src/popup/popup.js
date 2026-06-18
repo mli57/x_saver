@@ -4,6 +4,7 @@ const countEl = document.getElementById("count");
 const searchEl = document.getElementById("search");
 const sortEl = document.getElementById("sort");
 const clearAllElements = document.getElementById("clear-all");
+const exportCsv = document.getElementById("export-csv");
 
 // list of all saved posts loaded from chrome.storage.local
 let allPosts = [];
@@ -132,6 +133,40 @@ function loadData() {
   });
 }
 
+// make text from posts easy to export to csv
+function formatCsvField(text) {
+  if (text === null || text === undefined) {
+    text = "";
+  }
+  text = text.replace(/"/g, '""'); // replace all " with ""
+  text = `"${text}"`; // wrap text in " "
+  return text;
+}
+
+function buildCsv(posts) {
+  const header = ["author", "text", "url", "timestamp", "savedAt"];
+  const rows = posts.map((post) => {
+    return [post.author, post.text, post.url, post.timestamp, post.savedAt]
+    .map(formatCsvField)
+    .join(",");
+  })
+
+  const csv = [header.join(","), ...rows].join("\n");
+  return csv;
+}
+
+function downloadCsv() {
+  const csvString = buildCsv(allPosts);
+  const blob = new Blob([csvString], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "x-saved-posts.csv"
+
+  a.click(); // triggers download
+  URL.revokeObjectURL(url); // cleans temp url from memory
+}
+
 // re-render every time key is pressed
 searchEl.addEventListener("input", refresh);
 // re-render whenever the sort order changes
@@ -144,6 +179,12 @@ clearAllElements.addEventListener("click", () => {
     chrome.runtime.sendMessage({ type: "post_saved" }); // signals background.js to remove badge
   }
 });
+
+exportCsv.addEventListener("click", () => {
+  if(confirm("Export all posts to csv?")){
+    downloadCsv();
+  }
+})
 
 // Kick off the initial load when the popup opens
 loadData();
