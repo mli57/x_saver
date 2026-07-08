@@ -121,8 +121,15 @@ function deletePost(index) {
   const filtered = getFiltered(getSorted(allPosts));
   const post = filtered[index];
   allPosts = allPosts.filter((p) => p.url !== post.url || p.savedAt !== post.savedAt);
-  chrome.storage.local.set({ posts: allPosts }, refresh); // delete from storage
-  chrome.runtime.sendMessage({ type: "post_saved" }); // signals background.js for badge to decrease
+  // Added error handling callback to catch storage failures before updating UI
+  chrome.storage.local.set({ posts: allPosts }, () => {
+    if (chrome.runtime.lastError) {
+      console.error('Failed to delete post:', chrome.runtime.lastError.message);
+      return;
+    }
+    refresh();
+    chrome.runtime.sendMessage({ type: "post_saved" }); // signals background.js for badge to decrease
+  });
 }
 
 // Reads all saved posts from extension storage and runs the first render
@@ -175,8 +182,15 @@ sortEl.addEventListener("change", refresh);
 clearAllElements.addEventListener("click", () => {
   if (confirm("Delete all saved posts?")) {
     allPosts = [];
-    chrome.storage.local.set({ posts: [] }, refresh); // remove all data
-    chrome.runtime.sendMessage({ type: "post_saved" }); // signals background.js to remove badge
+    // Added error handling callback to prevent UI refresh if storage operation fails
+    chrome.storage.local.set({ posts: [] }, () => {
+      if (chrome.runtime.lastError) {
+        console.error('Failed to clear posts:', chrome.runtime.lastError.message);
+        return;
+      }
+      refresh();
+      chrome.runtime.sendMessage({ type: "post_saved" }); // signals background.js to remove badge
+    });
   }
 });
 
