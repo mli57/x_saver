@@ -33,12 +33,19 @@ To install from source:
 ## How to Use
 
 1. **Save a post:** While browsing X, click the "+ Save" button below any post. The button will change to "Saved" to confirm.
+   
    ![Save button](./assets/screenshots/save_button.png)
-2. **View saved posts:**: Click the X Saver extension icon to open your collection.
+
+2. **View saved posts:** Click the X Saver extension icon to open your collection.
+   
    ![Popup view](./assets/screenshots/popup.png)
+
 3. **Search and filter:** Type keywords in the search box to find posts by author or content.
-   <video src="./assets/screenshots/how_to_save.mp4" width="400" controls></video>
+
+   ![Search and filter demo](./assets/screenshots/how_to_save.gif)
+
 4. **Export**: Click "export posts" to download a CSV file of all your saved posts.
+   
 5. **Delete**: Click the "X" beside any post to remove it, or use "Clear all" to start fresh.
 
 ## Privacy & Local Storage
