@@ -64,9 +64,17 @@ function scanForPosts() {
   articles.forEach(addSaveButton);
 }
 
+// Debounce the observer callback to avoid redundant scans during instances of groups of unrelated DOM mutations running
+// Only scan once mutations go quiet for 150ms to avoid profile hovering, like counts updating, repost, etc.
+let debounceTimer = null;
+function scheduleScan() {
+  clearTimeout(debounceTimer); // cancel any scans waiting to run
+  debounceTimer = setTimeout(scanForPosts, 150); // starts new 150ms countdown
+}
+
 // Watch for new posts being added as the user scrolls
-const observer = new MutationObserver(scanForPosts);
+const observer = new MutationObserver(scheduleScan);
 observer.observe(document.body, { childList: true, subtree: true });
 
-// Initial scan
+// Initial scan (runs immediately, not debounced)
 scanForPosts();
