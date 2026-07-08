@@ -163,15 +163,21 @@ function buildCsv(posts) {
 }
 
 function downloadCsv() {
-  const csvString = buildCsv(allPosts);
-  const blob = new Blob([csvString], { type: 'text/csv' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "x-saved-posts.csv"
+  try{
+    const csvString = buildCsv(allPosts);
+    const blob = new Blob([csvString], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "x-saved-posts.csv"
 
-  a.click(); // triggers download
-  URL.revokeObjectURL(url); // cleans temp url from memory
+    a.click(); // triggers download
+    URL.revokeObjectURL(url); // cleans temp url from memory
+  }
+  catch (error) {
+    console.error('CSV export failed:', error);
+    alert('Failed to export CSV. Check console for more details.')
+  }
 }
 
 // re-render every time key is pressed
