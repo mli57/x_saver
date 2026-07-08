@@ -4,7 +4,7 @@
   "version": "1.0",
   "description": "Save and organize posts from X",
 
-  "permissions": ["storage", "action"],
+  "permissions": ["storage", "action", "tabs"],
   "icons": {
     "16": "assets/icons/img16.png",
     "48": "assets/icons/img48.png",
