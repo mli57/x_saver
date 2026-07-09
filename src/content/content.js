@@ -39,24 +39,34 @@ function addSaveButton(article) {
     return;
   }
 
-  const btn = document.createElement("button");
-  btn.className = SAVE_BTN_CLASS;
-  btn.title = "Save this post";
-  btn.textContent = "+ Save";
+  // extract post url
+  const statusLinkElement = article.querySelector('a[href*="/status/"]'); // finds link w/ "/status/"
+  const url = statusLinkElement ? "https://x.com" + statusLinkElement.getAttribute("href") : null;
 
-  btn.addEventListener("click", (e) => { // whenever button is clicked
-    e.stopPropagation(); // allows us to save without triggering X's listener, won't open the tweet
-    const data = extractPostData(article);
-    savePost(data);
-    btn.textContent = "Saved";
-    btn.disabled = true;
+  // check if post is already in storage
+  chrome.storage.local.get({ posts: []}, (result) => {
+    const alreadySaved = result.posts.some((p) => p.url === url);
+
+    const btn = document.createElement("button");
+    btn.className = SAVE_BTN_CLASS;
+    btn.title = alreadySaved ? "Already saved" : "Save this post";
+    btn.textContent = alreadySaved ? "Saved" : "+ Save";
+    btn.disabled = alreadySaved;
+
+    btn.addEventListener("click", (e) => { // whenever button is clicked
+      e.stopPropagation(); // allows us to save without triggering X's listener, won't open the tweet
+      const data = extractPostData(article);
+      savePost(data);
+      btn.textContent = "Saved";
+      btn.disabled = true;
+    });
+
+    // finds X's action bar (row with like/repost/reply), added save button here
+    const actionBar = article.querySelector('[role="group"]');
+    if (actionBar) {
+      actionBar.appendChild(btn);
+    }
   });
-
-  // finds X's action bar (row with like/repost/reply), added save button here
-  const actionBar = article.querySelector('[role="group"]');
-  if (actionBar) {
-    actionBar.appendChild(btn);
-  }
 }
 
 function scanForPosts() {
