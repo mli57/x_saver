@@ -21,7 +21,7 @@ X's native bookmarks are hard to use because there is no search or organization 
 
 ## Installation
 
-Download from the [Chrome Web Store](https://chromewebstore.google.com) --> placeholder link for now until i pay the $5
+Download from the [Chrome Web Store](https://chromewebstore.google.com/detail/x-saver/nphojfcamifegdcagcdekpkimahkghll)
 
 
 To install from source:
